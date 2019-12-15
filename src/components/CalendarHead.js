@@ -21,6 +21,24 @@ class CalendarHead extends PureComponent {
     }
   }
 
+  /*
+    getDerivedStateFromProps because parent state was changing and
+    to calculate state change for this component based on parent's state    
+  */
+  static getDerivedStateFromProps(props) {
+    const { listType, activeMonth, activeYear } = props;
+    return {
+      activeDatePeriodValue:
+        listType === 0 ? months[activeMonth].fullName : activeYear
+    };
+  }
+
+  componentDidUpdate() {
+    if (this.props.listType !== 2) {
+      this.updateArrows();
+    }
+  }
+
   arrowClicked = isBackArrow => {
     let { activeMonth, activeYear, listType, nextYears } = this.props;
     let year = activeYear;
@@ -56,12 +74,9 @@ class CalendarHead extends PureComponent {
         }
       }
     }
-    this.setState(
-      {
-        activeDatePeriodValue: listType === 0 ? months[month].fullName : year
-      },
-      () => this.updateArrows()
-    );
+    this.setState({
+      activeDatePeriodValue: listType === 0 ? months[month].fullName : year
+    });
     if (!disabledNextArrow || !disabledBackArrow) {
       this.props.updateCalendarState('activeMonth', month);
       this.props.updateCalendarState('activeYear', year);
@@ -112,16 +127,9 @@ class CalendarHead extends PureComponent {
         disabledBackArrow: true
       });
     }
-    this.setState(
-      {
-        activeDatePeriodValue: periodValue
-      },
-      () => {
-        if (type !== 2) {
-          this.updateArrows();
-        }
-      }
-    );
+    this.setState({
+      activeDatePeriodValue: periodValue
+    });
     this.props.updateCalendarState('listType', type);
   };
 

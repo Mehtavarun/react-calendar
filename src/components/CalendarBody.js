@@ -30,10 +30,12 @@ class CalendarBody extends PureComponent {
         return this.getDisplayBtn(i, month.fullName);
       });
     } else {
+      const baseYear = 1970;
       return Array.apply(null, {
-        length: 100
+        length: 40
       }).map((Number, year) => {
-        return this.getDisplayBtn(year, year + 1970);
+        const value = year + baseYear;
+        return this.getDisplayBtn(value, value);
       });
     }
   };
@@ -47,6 +49,7 @@ class CalendarBody extends PureComponent {
       key = 'activeYear';
     }
     updateCalendarState(key, value);
+    updateCalendarState('listType', listType !== 0 ? listType - 1 : listType);
   };
 
   getDisplayBtn = (key, value) => {
