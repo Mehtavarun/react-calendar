@@ -4,20 +4,16 @@ import { months, startYear } from '../data/months.json';
 class CalendarHead extends PureComponent {
   constructor(props) {
     super(props);
-    const { activeMonth, activeYear, listType } = props;
+    const { activeMonth } = props;
     this.state = {
       activeDatePeriodValue: months[activeMonth].fullName,
-      activeMonth,
-      activeYear,
-      listType,
       disabledBackArrow: false,
-      disabledNextArrow: false,
-      nextYears: new Date().getFullYear() + 5
+      disabledNextArrow: false
     };
   }
 
   componentDidMount() {
-    const { activeMonth, activeYear } = this.state;
+    const { activeMonth, activeYear } = this.props;
     if (activeMonth === months[0] && activeYear === startYear) {
       this.setState({
         disabledBackArrow: true
@@ -26,12 +22,11 @@ class CalendarHead extends PureComponent {
   }
 
   arrowClicked = isBackArrow => {
-    let { activeMonth, activeYear, listType, nextYears } = this.state;
+    let { activeMonth, activeYear, listType, nextYears } = this.props;
     let year = activeYear;
     let month = activeMonth;
     const disabledNextArrow = this.isNextArrowDisabled();
     const disabledBackArrow = this.isBackArrowDisabled();
-    console.log(listType);
     if (isBackArrow) {
       if (disabledBackArrow) {
       } else if (listType === 0) {
@@ -63,8 +58,6 @@ class CalendarHead extends PureComponent {
     }
     this.setState(
       {
-        activeMonth: month,
-        activeYear: year,
         activeDatePeriodValue: listType === 0 ? months[month].fullName : year
       },
       () => this.updateArrows()
@@ -76,13 +69,13 @@ class CalendarHead extends PureComponent {
   };
 
   isBackArrowDisabled = () => {
-    let { activeMonth, activeYear, listType } = this.state;
+    let { activeMonth, activeYear, listType } = this.props;
     let year = activeYear;
     let month = activeMonth;
     let disabledBackArrow = false;
     if (
       (listType === 1 && year === startYear) ||
-      (listType === 2 && year === startYear && month === 0)
+      (listType === 0 && year === startYear && month === 0)
     ) {
       disabledBackArrow = true;
     } else {
@@ -92,13 +85,13 @@ class CalendarHead extends PureComponent {
   };
 
   isNextArrowDisabled = () => {
-    let { activeMonth, activeYear, listType, nextYears } = this.state;
+    let { activeMonth, activeYear, listType, nextYears } = this.props;
     let year = activeYear;
     let month = activeMonth;
     let disabledNextArrow = false;
     if (
-      (listType === 2 && year === nextYears) ||
-      (listType === 1 && year === nextYears && month === 11)
+      (listType === 1 && year === nextYears) ||
+      (listType === 0 && year === nextYears && month === 11)
     ) {
       disabledNextArrow = true;
     } else {
@@ -108,19 +101,28 @@ class CalendarHead extends PureComponent {
   };
 
   datePeriodClicked = () => {
-    const { listType, activeYear, activeMonth } = this.state;
+    const { listType, activeYear, activeMonth } = this.props;
     let periodValue = activeYear;
     let type = listType > 1 ? listType % 2 : listType + 1;
     if (type === 0) {
       periodValue = months[activeMonth].fullName;
+    } else if (type === 2) {
+      this.setState({
+        disabledNextArrow: true,
+        disabledBackArrow: true
+      });
     }
     this.setState(
       {
-        activeDatePeriodValue: periodValue,
-        listType: type
+        activeDatePeriodValue: periodValue
       },
-      () => this.updateArrows()
+      () => {
+        if (type !== 2) {
+          this.updateArrows();
+        }
+      }
     );
+    this.props.updateCalendarState('listType', type);
   };
 
   updateArrows = () => {

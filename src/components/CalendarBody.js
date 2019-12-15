@@ -17,6 +17,50 @@ class CalendarBody extends PureComponent {
     }
   };
 
+  getList = () => {
+    const { listType } = this.props;
+    if (listType === 0) {
+      return Array.apply(null, {
+        length: this.getDays()
+      }).map((Number, date) => {
+        return this.getDisplayBtn(date, date + 1);
+      });
+    } else if (listType === 1) {
+      return months.map((month, i) => {
+        return this.getDisplayBtn(i, month.fullName);
+      });
+    } else {
+      return Array.apply(null, {
+        length: 100
+      }).map((Number, year) => {
+        return this.getDisplayBtn(year, year + 1970);
+      });
+    }
+  };
+
+  datePeriodClicked = value => {
+    const { listType, updateCalendarState } = this.props;
+    let key = '';
+    if (listType === 1) {
+      key = 'activeMonth';
+    } else if (listType === 2) {
+      key = 'activeYear';
+    }
+    updateCalendarState(key, value);
+  };
+
+  getDisplayBtn = (key, value) => {
+    return (
+      <button
+        className="date"
+        key={key}
+        onClick={() => this.datePeriodClicked(key)}
+      >
+        {value}
+      </button>
+    );
+  };
+
   render() {
     return (
       <div className="calendarBody">
@@ -31,17 +75,7 @@ class CalendarBody extends PureComponent {
             <li className="weekendDaysName">Sat</li>
           </ul>
         </div>
-        <div className="dates">
-          {Array.apply(null, {
-            length: this.getDays()
-          }).map((Number, date) => {
-            return (
-              <button className="date" key={date}>
-                {date + 1}
-              </button>
-            );
-          })}
-        </div>
+        <div className="dates">{this.getList()}</div>
       </div>
     );
   }

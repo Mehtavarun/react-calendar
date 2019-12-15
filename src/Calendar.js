@@ -10,7 +10,8 @@ class Calendar extends PureComponent {
     this.state = {
       activeMonth: date.getMonth(),
       activeYear: date.getFullYear(),
-      listType: 0
+      listType: 0,
+      nextYears: new Date().getFullYear() + 5
     };
   }
 
@@ -20,7 +21,7 @@ class Calendar extends PureComponent {
     });
 
   render() {
-    const { activeMonth, activeYear, listType } = this.state;
+    const { activeMonth, activeYear, listType, nextYears } = this.state;
     return (
       <div className="container">
         <CalendarHead
@@ -28,8 +29,15 @@ class Calendar extends PureComponent {
           updateCalendarState={this.updateCalendarState}
           listType={listType}
           activeYear={activeYear}
+          nextYears={nextYears}
         />
-        <CalendarBody activeMonth={activeMonth} activeYear={activeYear} />
+        <CalendarBody
+          updateCalendarState={this.updateCalendarState}
+          activeMonth={activeMonth}
+          activeYear={activeYear}
+          listType={listType}
+          nextYears={nextYears}
+        />
       </div>
     );
   }
