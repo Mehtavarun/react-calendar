@@ -1,0 +1,66 @@
+{
+    "startYear": 1970,
+    "isLeapYear": false,
+    "months": [
+                {
+                  "fullName": "January",
+                  "code": "Jan",
+                  "days": 31
+                },
+                {
+                  "fullName": "Februray",
+                  "code": "Feb",
+                  "days": 28
+                },
+                {
+                  "fullName": "March",
+                  "code": "March",
+                  "days": 31
+                },
+                {
+                  "fullName": "April",
+                  "code": "April",
+                  "days": 30
+                },
+                {
+                  "fullName": "May",
+                  "code": "May",
+                  "days": 31
+                },
+                {
+                  "fullName": "June",
+                  "code": "June",
+                  "days": 30
+                },
+                {
+                  "fullName": "July",
+                  "code": "July",
+                  "days": 30
+                },
+                {
+                  "fullName": "August",
+                  "code": "Aug",
+                  "days": 31
+                },
+                {
+                  "fullName": "September",
+                  "code": "Sept",
+                  "days": 30
+                },
+                {
+                  "fullName": "October",
+                  "code": "Oct",
+                  "days": 31
+                },
+                {
+                  "fullName": "November",
+                  "code": "Nov",
+                  "days": 30
+                },
+                {
+                  "fullName": "December",
+                  "code": "Dec",
+                  "days": 31
+                }
+              ]
+}
