@@ -1,5 +1,9 @@
 import React, { PureComponent } from 'react';
 import { months } from '../data/months.json';
+import 'semantic-ui-css/semantic.min.css';
+import { Grid } from 'semantic-ui-react';
+
+const weekdays = ['SUN', 'MON', 'TUES', 'WED', 'THUR', 'FRI', 'SAT'];
 
 class CalendarBody extends PureComponent {
   getDays = () => {
@@ -54,31 +58,28 @@ class CalendarBody extends PureComponent {
 
   getDisplayBtn = (key, value) => {
     return (
-      <button
-        className="date"
-        key={key}
+      <Grid.Column
         onClick={() => this.datePeriodClicked(key)}
+        size="medium"
+        key={key}
       >
         {value}
-      </button>
+      </Grid.Column>
     );
   };
 
   render() {
+    const { listType } = this.props;
     return (
       <div className="calendarBody">
-        <div className="daysHeading">
-          <ul className="daysList">
-            <li className="weekendDaysName">Sun</li>
-            <li className="weekDaysName">Mon</li>
-            <li className="weekDaysName">Tue</li>
-            <li className="weekDaysName">Wed</li>
-            <li className="weekDaysName">Thur</li>
-            <li className="weekDaysName">Fri</li>
-            <li className="weekendDaysName">Sat</li>
-          </ul>
-        </div>
-        <div className="dates">{this.getList()}</div>
+        {listType === 0 && (
+          <Grid columns={7}>
+            {weekdays.map((day, i) => {
+              return <Grid.Column key={i}>{day}</Grid.Column>;
+            })}
+          </Grid>
+        )}
+        <Grid columns={listType === 0 ? 7 : 4}>{this.getList()}</Grid>
       </div>
     );
   }

@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import { months, startYear } from '../data/months.json';
+import 'semantic-ui-css/semantic.min.css';
+import { Button } from 'semantic-ui-react';
 
 class CalendarHead extends PureComponent {
   constructor(props) {
@@ -147,26 +149,24 @@ class CalendarHead extends PureComponent {
       disabledNextArrow
     } = this.state;
     return (
-      <div className="calendarHead">
-        <button
-          id="backArrowBtn"
-          className=""
+      <div>
+        <Button
           onClick={() => this.arrowClicked(true)}
           disabled={disabledBackArrow}
-        >
-          {'<'}
-        </button>
-        <button id="datePeriodButton" onClick={this.datePeriodClicked}>
+          icon="left arrow"
+          size="small"
+          circular
+        />
+        <Button onClick={this.datePeriodClicked}>
           {activeDatePeriodValue}
-        </button>
-        <button
-          id="nextArrowBtn"
-          className=""
+        </Button>
+        <Button
           onClick={() => this.arrowClicked(false)}
           disabled={disabledNextArrow}
-        >
-          {'>'}
-        </button>
+          icon="right arrow"
+          size="small"
+          circular
+        />
       </div>
     );
   }

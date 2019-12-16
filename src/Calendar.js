@@ -23,7 +23,7 @@ class Calendar extends PureComponent {
   render() {
     const { activeMonth, activeYear, listType, nextYears } = this.state;
     return (
-      <div className="container">
+      <div>
         <CalendarHead
           activeMonth={activeMonth}
           updateCalendarState={this.updateCalendarState}
