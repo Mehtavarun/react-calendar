@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { months } from '../data/months.json';
 import 'semantic-ui-css/semantic.min.css';
 import { Grid } from 'semantic-ui-react';
+import './calendar.css';
 
 const weekdays = ['SUN', 'MON', 'TUES', 'WED', 'THUR', 'FRI', 'SAT'];
 
@@ -22,21 +23,28 @@ class CalendarBody extends PureComponent {
   };
 
   getList = () => {
-    const { listType } = this.props;
+    const { listType, activeMonth, activeYear } = this.props;
+    const datetime = `${months[activeMonth].fullName} 1, ${activeYear} 00:00:01`;
+    const day = new Date(datetime).getDay();
+    const days = this.getDays();
+    const len = days + day <= 35 ? 35 : 42;
     if (listType === 0) {
       return Array.apply(null, {
-        length: this.getDays()
+        length: len
       }).map((Number, date) => {
-        return this.getDisplayBtn(date, date + 1);
+        return date >= day && date < days + day
+          ? this.getDisplayBtn(date - day - 1, date - day + 1)
+          : this.getEmptyDisplayBtn(date - day - 1);
       });
     } else if (listType === 1) {
       return months.map((month, i) => {
         return this.getDisplayBtn(i, month.fullName);
       });
     } else {
-      const baseYear = 1970;
+      const baseYear = activeYear - 9;
+      const endYear = activeYear + 10;
       return Array.apply(null, {
-        length: 40
+        length: endYear - baseYear + 1
       }).map((Number, year) => {
         const value = year + baseYear;
         return this.getDisplayBtn(value, value);
@@ -53,7 +61,10 @@ class CalendarBody extends PureComponent {
       key = 'activeYear';
     }
     updateCalendarState(key, value);
-    updateCalendarState('listType', listType !== 0 ? listType - 1 : listType);
+    updateCalendarState(
+      'listType',
+      listType !== 0 ? (listType === 2 ? 1 : 0) : listType
+    );
   };
 
   getDisplayBtn = (key, value) => {
@@ -62,24 +73,43 @@ class CalendarBody extends PureComponent {
         onClick={() => this.datePeriodClicked(key)}
         size="medium"
         key={key}
+        textAlign="center"
+        className="dateValueBtn"
       >
         {value}
       </Grid.Column>
     );
   };
 
+  getEmptyDisplayBtn = key => {
+    return <Grid.Column key={key} className="dateValueBtnEmpty" />;
+  };
+
   render() {
     const { listType } = this.props;
     return (
-      <div className="calendarBody">
+      <div
+        style={{
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          marginTop: '5px'
+        }}
+      >
         {listType === 0 && (
-          <Grid columns={7}>
+          <Grid
+            columns={7}
+            textAlign="center"
+            style={{ backgroundColor: '#bdbdbd' }}
+          >
             {weekdays.map((day, i) => {
               return <Grid.Column key={i}>{day}</Grid.Column>;
             })}
           </Grid>
         )}
-        <Grid columns={listType === 0 ? 7 : 4}>{this.getList()}</Grid>
+        <Grid columns={listType === 0 ? 7 : 4} style={{}}>
+          {this.getList()}
+        </Grid>
       </div>
     );
   }

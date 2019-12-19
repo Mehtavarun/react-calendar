@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { months, startYear } from '../data/months.json';
 import 'semantic-ui-css/semantic.min.css';
-import { Button } from 'semantic-ui-react';
+import { Button, Grid } from 'semantic-ui-react';
 
 class CalendarHead extends PureComponent {
   constructor(props) {
@@ -149,25 +149,31 @@ class CalendarHead extends PureComponent {
       disabledNextArrow
     } = this.state;
     return (
-      <div>
-        <Button
-          onClick={() => this.arrowClicked(true)}
-          disabled={disabledBackArrow}
-          icon="left arrow"
-          size="small"
-          circular
-        />
-        <Button onClick={this.datePeriodClicked}>
-          {activeDatePeriodValue}
-        </Button>
-        <Button
-          onClick={() => this.arrowClicked(false)}
-          disabled={disabledNextArrow}
-          icon="right arrow"
-          size="small"
-          circular
-        />
-      </div>
+      <Grid centered>
+        <Grid.Column width={4}>
+          <Button
+            onClick={() => this.arrowClicked(true)}
+            disabled={disabledBackArrow}
+            icon="left arrow"
+            size="medium"
+            circular
+          />
+        </Grid.Column>
+        <Grid.Column width={5}>
+          <Button size="large" onClick={this.datePeriodClicked}>
+            {activeDatePeriodValue}
+          </Button>
+        </Grid.Column>
+        <Grid.Column>
+          <Button
+            onClick={() => this.arrowClicked(false)}
+            disabled={disabledNextArrow}
+            icon="right arrow"
+            size="medium"
+            circular
+          />
+        </Grid.Column>
+      </Grid>
     );
   }
 }

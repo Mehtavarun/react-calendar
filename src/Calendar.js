@@ -10,7 +10,7 @@ class Calendar extends PureComponent {
     this.state = {
       activeMonth: date.getMonth(),
       activeYear: date.getFullYear(),
-      listType: 0,
+      listType: 2,
       nextYears: new Date().getFullYear() + 5
     };
   }
@@ -23,7 +23,7 @@ class Calendar extends PureComponent {
   render() {
     const { activeMonth, activeYear, listType, nextYears } = this.state;
     return (
-      <div>
+      <div style={{ marginTop: '10px' }}>
         <CalendarHead
           activeMonth={activeMonth}
           updateCalendarState={this.updateCalendarState}
