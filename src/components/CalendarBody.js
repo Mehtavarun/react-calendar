@@ -23,32 +23,16 @@ class CalendarBody extends PureComponent {
   };
 
   getList = () => {
-    const { listType, activeMonth, activeYear } = this.props;
+    const { listType, activeMonth, activeYear, listYear } = this.props;
     const datetime = `${months[activeMonth].fullName} 1, ${activeYear} 00:00:01`;
     const day = new Date(datetime).getDay();
     const days = this.getDays();
-    const len = days + day <= 35 ? 35 : 42;
     if (listType === 0) {
-      return Array.apply(null, {
-        length: len
-      }).map((Number, date) => {
-        return date >= day && date < days + day
-          ? this.getDisplayBtn(date - day - 1, date - day + 1)
-          : this.getEmptyDisplayBtn(date - day - 1);
-      });
+      return this.getDayForDate(day, days);
     } else if (listType === 1) {
-      return months.map((month, i) => {
-        return this.getDisplayBtn(i, month.fullName);
-      });
+      return this.getMonths();
     } else {
-      const baseYear = activeYear - 9;
-      const endYear = activeYear + 10;
-      return Array.apply(null, {
-        length: endYear - baseYear + 1
-      }).map((Number, year) => {
-        const value = year + baseYear;
-        return this.getDisplayBtn(value, value);
-      });
+      return this.getYears(listYear);
     }
   };
 
@@ -59,6 +43,7 @@ class CalendarBody extends PureComponent {
       key = 'activeMonth';
     } else if (listType === 2) {
       key = 'activeYear';
+      updateCalendarState('listYear', value);
     }
     updateCalendarState(key, value);
     updateCalendarState(
@@ -83,6 +68,34 @@ class CalendarBody extends PureComponent {
 
   getEmptyDisplayBtn = key => {
     return <Grid.Column key={key} className="dateValueBtnEmpty" />;
+  };
+
+  getDayForDate = (day, days) => {
+    const len = days + day <= 35 ? 35 : 42;
+    return Array.apply(null, {
+      length: len
+    }).map((Number, date) => {
+      return date >= day && date < days + day
+        ? this.getDisplayBtn(date - day - 1, date - day + 1)
+        : this.getEmptyDisplayBtn(date - day - 1);
+    });
+  };
+
+  getMonths = () => {
+    return months.map((month, i) => {
+      return this.getDisplayBtn(i, month.fullName);
+    });
+  };
+
+  getYears = activeYear => {
+    const baseYear = activeYear - 9;
+    const endYear = activeYear + 10;
+    return Array.apply(null, {
+      length: endYear - baseYear + 1
+    }).map((Number, year) => {
+      const value = year + baseYear;
+      return this.getDisplayBtn(value, value);
+    });
   };
 
   render() {

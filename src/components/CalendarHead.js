@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { months, startYear } from '../data/months.json';
+import { months } from '../data/months.json';
 import 'semantic-ui-css/semantic.min.css';
 import { Button, Grid } from 'semantic-ui-react';
 
@@ -15,10 +15,27 @@ class CalendarHead extends PureComponent {
   }
 
   componentDidMount() {
-    const { activeMonth, activeYear } = this.props;
-    if (activeMonth === months[0] && activeYear === startYear) {
+    const {
+      activeMonth,
+      activeYear,
+      startYear,
+      lastYear,
+      listYear
+    } = this.props;
+    if (
+      (activeMonth === months[0] && activeYear === startYear) ||
+      listYear - 9 <= startYear
+    ) {
       this.setState({
         disabledBackArrow: true
+      });
+    }
+    if (
+      (activeMonth === months[11] && activeYear === lastYear) ||
+      listYear + 10 >= lastYear
+    ) {
+      this.setState({
+        disabledNextArrow: true
       });
     }
   }
@@ -36,14 +53,20 @@ class CalendarHead extends PureComponent {
   }
 
   componentDidUpdate() {
-    if (this.props.listType !== 2) {
-      this.updateArrows();
-    }
+    this.updateArrows();
   }
 
   arrowClicked = isBackArrow => {
-    let { activeMonth, activeYear, listType, nextYears } = this.props;
+    let {
+      activeMonth,
+      activeYear,
+      listType,
+      lastYear,
+      startYear,
+      listYear
+    } = this.props;
     let year = activeYear;
+    let yearForList = listYear;
     let month = activeMonth;
     const disabledNextArrow = this.isNextArrowDisabled();
     const disabledBackArrow = this.isBackArrowDisabled();
@@ -60,6 +83,11 @@ class CalendarHead extends PureComponent {
         if (year !== startYear) {
           year -= 1;
         }
+      } else {
+        yearForList -= 19;
+        if (yearForList <= startYear) {
+          yearForList = startYear + 9;
+        }
       }
     } else {
       if (disabledNextArrow) {
@@ -71,8 +99,13 @@ class CalendarHead extends PureComponent {
           month += 1;
         }
       } else if (listType === 1) {
-        if (year !== nextYears) {
+        if (year !== lastYear) {
           year += 1;
+        }
+      } else {
+        yearForList += 19;
+        if (yearForList >= lastYear) {
+          yearForList = lastYear - 10;
         }
       }
     }
@@ -82,17 +115,19 @@ class CalendarHead extends PureComponent {
     if (!disabledNextArrow || !disabledBackArrow) {
       this.props.updateCalendarState('activeMonth', month);
       this.props.updateCalendarState('activeYear', year);
+      this.props.updateCalendarState('listYear', yearForList);
     }
   };
 
   isBackArrowDisabled = () => {
-    let { activeMonth, activeYear, listType } = this.props;
+    let { activeMonth, activeYear, listType, startYear, listYear } = this.props;
     let year = activeYear;
     let month = activeMonth;
     let disabledBackArrow = false;
     if (
       (listType === 1 && year === startYear) ||
-      (listType === 0 && year === startYear && month === 0)
+      (listType === 0 && year === startYear && month === 0) ||
+      listYear - 9 <= startYear
     ) {
       disabledBackArrow = true;
     } else {
@@ -102,13 +137,14 @@ class CalendarHead extends PureComponent {
   };
 
   isNextArrowDisabled = () => {
-    let { activeMonth, activeYear, listType, nextYears } = this.props;
+    let { activeMonth, activeYear, listType, lastYear, listYear } = this.props;
     let year = activeYear;
     let month = activeMonth;
     let disabledNextArrow = false;
     if (
-      (listType === 1 && year === nextYears) ||
-      (listType === 0 && year === nextYears && month === 11)
+      (listType === 1 && year === lastYear) ||
+      (listType === 0 && year === lastYear && month === 11) ||
+      listYear + 10 >= lastYear
     ) {
       disabledNextArrow = true;
     } else {
@@ -123,11 +159,6 @@ class CalendarHead extends PureComponent {
     let type = listType > 1 ? listType % 2 : listType + 1;
     if (type === 0) {
       periodValue = months[activeMonth].fullName;
-    } else if (type === 2) {
-      this.setState({
-        disabledNextArrow: true,
-        disabledBackArrow: true
-      });
     }
     this.setState({
       activeDatePeriodValue: periodValue
