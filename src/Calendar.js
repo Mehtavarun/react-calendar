@@ -9,19 +9,10 @@ class Calendar extends PureComponent {
     const date = new Date();
     const activeYear = date.getFullYear();
     const activeMonth = date.getMonth();
-    let listYear = activeYear;
-    const { startYear = 2000, lastYear = 2019 } = props;
-    if (listYear - 19 <= startYear) {
-      listYear = startYear + 9;
-    }
-    if (listYear + 19 >= lastYear) {
-      listYear = lastYear - 10;
-    }
+    const listYear = activeYear;
     this.state = {
       activeMonth,
       activeYear,
-      startYear,
-      lastYear,
       listYear,
       listType: 2
     };
@@ -33,14 +24,7 @@ class Calendar extends PureComponent {
     });
 
   render() {
-    const {
-      activeMonth,
-      activeYear,
-      listType,
-      lastYear,
-      startYear,
-      listYear
-    } = this.state;
+    const { activeMonth, activeYear, listType, listYear } = this.state;
     return (
       <div style={{ marginTop: '10px' }}>
         <CalendarHead
@@ -48,16 +32,13 @@ class Calendar extends PureComponent {
           updateCalendarState={this.updateCalendarState}
           listType={listType}
           activeYear={activeYear}
-          lastYear={lastYear}
           listYear={listYear}
-          startYear={startYear}
         />
         <CalendarBody
           updateCalendarState={this.updateCalendarState}
           activeMonth={activeMonth}
           activeYear={activeYear}
           listType={listType}
-          lastYear={lastYear}
           listYear={listYear}
         />
       </div>
