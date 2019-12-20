@@ -39,6 +39,7 @@ class CalendarHead extends PureComponent {
         }
       } else if (listType === 1) {
         year -= 1;
+        yearForList -= 1;
       } else {
         yearForList -= 19;
       }
@@ -52,6 +53,7 @@ class CalendarHead extends PureComponent {
         }
       } else if (listType === 1) {
         year += 1;
+        yearForList += 1;
       } else {
         yearForList += 19;
       }
