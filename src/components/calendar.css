@@ -1,9 +1,0 @@
-.dateValueBtn, .dateValueBtnEmpty {
-    background-color: #eeeeee;
-}
-
-
-.dateValueBtn:hover{
-    background-color: #bdbdbd;
-    cursor: pointer;
-}
